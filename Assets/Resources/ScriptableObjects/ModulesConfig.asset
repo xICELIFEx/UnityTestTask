@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _modulesData:
   - _moduleType: 2
-    _description: Increase Sheeld amount on {0}{1}
+    _description: Increase Sheeld amount on {0} {1}
     _value: 50
     _isPercentValue: 0
   - _moduleType: 1
-    _description: Increase HP amount on {0}{1}
+    _description: Increase HP amount on {0} {1}
     _value: 50
     _isPercentValue: 0
   - _moduleType: 5
-    _description: Reduces Weapon reload time on {0}{1}
+    _description: Reduces Weapon reload time on {0} {1}
     _value: 20
     _isPercentValue: 1
   - _moduleType: 3
-    _description: Increase Sheeld restore speed on {0}{1}
+    _description: Increase Sheeld restore speed on {0} {1}
     _value: 20
     _isPercentValue: 1

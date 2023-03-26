@@ -34,24 +34,20 @@ namespace Assets.Scripts.PartThree.Modules
                 }
             }
 
-            if (moduleView != null)
-            {
-                _moduleViews.Remove(moduleView);
-                moduleView.OnModuleButtonClickedEvent -= OnModuleButtonClickedEventHandler;
-                Destroy(moduleView.gameObject);
-            }
+            if (moduleView != null) { RemoveModuleView(moduleView); }
         }
         
         public void Clear()
         {
-            while (_moduleViews.Count > 0)
-            {
-                ModuleView moduleView = _moduleViews[0];
-                _moduleViews.Remove(moduleView);
-                moduleView.OnModuleButtonClickedEvent -= OnModuleButtonClickedEventHandler;
-                Destroy(moduleView);
-            }
+            while (_moduleViews.Count > 0) { RemoveModuleView(_moduleViews[0]); }
         }
+
+        private void RemoveModuleView(ModuleView moduleView)
+        {
+            _moduleViews.Remove(moduleView);
+            moduleView.OnModuleButtonClickedEvent -= OnModuleButtonClickedEventHandler;
+            Destroy(moduleView.gameObject);
+        } 
         
         private void OnModuleButtonClickedEventHandler(ModuleView moduleView)
         {

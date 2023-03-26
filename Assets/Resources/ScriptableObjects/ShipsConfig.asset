@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136fee2e83d64cb68073e5b127b3bf94, type: 3}
+  m_Name: ShipsConfig
+  m_EditorClassIdentifier: 
+  _shipsData:
+  - _description: Type A
+    _hpAmount: 100
+    _sheeldAmout: 80
+    _sheeldRestore: 100
+    _moduleCount: 2
+    _weaponCount: 2
+  - _description: Type B
+    _hpAmount: 60
+    _sheeldAmout: 120
+    _sheeldRestore: 100
+    _moduleCount: 3
+    _weaponCount: 2

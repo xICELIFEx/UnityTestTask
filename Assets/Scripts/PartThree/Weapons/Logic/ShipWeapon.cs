@@ -10,9 +10,9 @@ namespace Assets.Scripts.PartThree.Weapons
         public string Id => _id;
         public CharacteristicWeaponWrapperBase Characteristic => _characteristic;
         
-        public ShipWeapon(string id, int damage, int reload)
+        public ShipWeapon(int damage, int reload)
         {
-            _id = id;
+            _id = this.GetHashCode().ToString();
             _characteristic = new CharacteristicWeaponWrapperBase(new CharacteristicWeaponBase(CharacteristicType.Weapon, damage, reload));
         }
     }

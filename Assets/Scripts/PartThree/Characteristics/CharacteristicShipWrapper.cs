@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.PartThree.Characteristics
 {
@@ -9,6 +10,10 @@ namespace Assets.Scripts.PartThree.Characteristics
         public event Action<int, int> OnSheeldRestoreChanged;
         public event Action<int, int> OnModuleCountChanged;
         public event Action<int, int> OnWeaponCountChanged;
+        
+        // public event Action<string, CharacteristicType, int> OnCharacteristicChanged;
+        
+        // private Dictionary<string, SimpleCharacteristic> _characteristics;
         
         private int _hpAmount;
         private int _sheeldAmount;
@@ -80,5 +85,24 @@ namespace Assets.Scripts.PartThree.Characteristics
             _moduleCount = _characteristicBase.ModuleCount;
             _weaponCount = _characteristicBase.WeaponCount;
         }
+
+        // private void AddCharacteristic(string name, SimpleCharacteristicType simpleCharacteristicType, int baseValue, float multiplier)
+        // {
+        //     SimpleCharacteristic simpleCharacteristic = new SimpleCharacteristic(name, simpleCharacteristicType, baseValue, multiplier);
+        //     _characteristics.Add(name, simpleCharacteristic);
+        //     simpleCharacteristic.OnBaseValueChanged += OnBaseValueChangedHandler;
+        //     simpleCharacteristic.OnMultiplierChanged += OnMultiplierChangedHandler;
+        // }
+        //
+        // private void OnBaseValueChangedHandler(string name)
+        // {
+        //     SimpleCharacteristic simpleCharacteristic = _characteristics[name];
+        //     OnCharacteristicChanged?.Invoke(simpleCharacteristic.Name, simpleCharacteristic.CharacteristicType, );
+        // }
+        //
+        // private void OnMultiplierChangedHandler(string name)
+        // {
+        //     _characteristics[name].CharacteristicType
+        // }
     }
 }

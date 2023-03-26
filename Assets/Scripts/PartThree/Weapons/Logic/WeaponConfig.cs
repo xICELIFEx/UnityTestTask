@@ -8,7 +8,7 @@ namespace Assets.Scripts.PartThree.Weapons
     {
         [SerializeField] private string _description;
         [SerializeField] private int _damage;
-        [SerializeField] private float _reloadTime;
+        [SerializeField] [Tooltip("in milliseconds")]private float _reloadTime;
 
         public string Description => _description;
         public int Damage => _damage;

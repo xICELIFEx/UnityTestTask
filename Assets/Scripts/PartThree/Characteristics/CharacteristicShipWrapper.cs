@@ -54,6 +54,11 @@ namespace Assets.Scripts.PartThree.Characteristics
             }
         }
         
+        public float SheeldRestoreTimer
+        {
+            get { return 1f/ ((float) _sheeldRestore / 100f); }
+        }
+        
         public int ModuleCount
         {
             get { return _moduleCount; }

@@ -15,10 +15,10 @@ MonoBehaviour:
   _weaponsData:
   - _description: Weaponn with {0} damage and {1} reload time
     _damage: 5
-    _reloadTime: 3
+    _reloadTime: 3000
   - _description: Weaponn with {0} damage and {1} reload time
     _damage: 4
-    _reloadTime: 2
+    _reloadTime: 2000
   - _description: Weaponn with {0} damage and {1} reload time
     _damage: 20
-    _reloadTime: 5
+    _reloadTime: 5000

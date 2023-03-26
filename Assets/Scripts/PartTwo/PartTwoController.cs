@@ -40,8 +40,10 @@ namespace Assets.Scripts.PartTwo
         private IPathFinder _pathFinder;
         private NodeGraph _nodeGraph = new NodeGraph();
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             _pathFinder = new PathFinderShortPath();
 
             ConfigureGraph();
@@ -69,6 +71,14 @@ namespace Assets.Scripts.PartTwo
             string endId = _endIdDropdown.options[_endIdDropdown.value].text;
 
             Path path = _pathFinder.FindPath(_nodeGraph, startId, endId);
+            if (path == null)
+            {
+                _statesCountText.text = "0";
+                _branchesCountText.text = "0";
+                _pathText.text = "";
+                
+                return;
+            }
             _statesCountText.text = path.Nodes.Count.ToString();
 
             //TODO: check branches count calculation

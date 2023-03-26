@@ -35,7 +35,8 @@ namespace Assets.Scripts.PartThree.Weapons
                 return;
             }
 
-            _weaponDescription.text = String.Format(weaponConfig.Description, weaponConfig.Damage, weaponConfig.ReloadTime);
+            float reloadTimeInSeconds = ((float)weaponConfig.ReloadTime) / 1000f;
+            _weaponDescription.text = String.Format(weaponConfig.Description, weaponConfig.Damage, reloadTimeInSeconds);
         }
         
         private void OnWeaponButtonClicked()

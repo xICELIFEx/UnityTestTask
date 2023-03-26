@@ -22,8 +22,14 @@ namespace Assets.Scripts.PartTwo
                 Debug.LogError("Can not find nodes");
                 return null;
             }
+            
+            if (startNode == endNode)
+            {
+                Debug.LogError("Already at destination point");
+                return null;
+            }
 
-
+            bool reached = false;
             List<Path> paths = new List<Path>();
             
             List<Link> links = nodeGraph.GetLinks(startNode.Id);
@@ -34,55 +40,57 @@ namespace Assets.Scripts.PartTwo
                 path.Nodes.Add(startNode.Id == links[i].First.Id ? links[i].Second : links[i].First);
                 path.Links.Add(links[i]);
                 
-                paths.Add(path);
+                if (links[i].First == endNode ||
+                    links[i].Second == endNode)
+                { reached = true; }
                 
+                paths.Add(path);
             }
             
             List<Path> newPaths = new List<Path>();
 
-            bool reached = false;
-            do
+            if (!reached)
             {
-                newPaths.Clear();
-                
-                for (int i = 0; i < paths.Count; i++)
+                do
                 {
-                    links = nodeGraph.GetLinks(paths[i].Nodes.Last().Id);
-                    for (int j = 0; j < links.Count; j++)
+                    newPaths.Clear();
+
+                    for (int i = 0; i < paths.Count; i++)
                     {
-                        bool found = false;
-                        for (int k = 0; k < paths.Count; k++)
-                        {
-                            if (paths[k].Nodes.Contains(links[j].Second) &&
-                                paths[k].Nodes.Contains(links[j].First))
-                            {
-                                found = true;
-                                break;
-                            }    
-                        }
+                        // ProcessPath(nodeGraph, paths, paths[i], endNode, ref reached);
                         
-                        if (found) { continue; }
-
-                        if (links[j].First == endNode ||
-                            links[j].Second == endNode)
+                        links = nodeGraph.GetLinks(paths[i].Nodes.Last().Id);
+                        for (int j = 0; j < links.Count; j++)
                         {
-                            reached = true;
+                            bool found = false;
+                            for (int k = 0; k < paths.Count; k++)
+                            {
+                                if (paths[k].Nodes.Contains(links[j].Second) &&
+                                    paths[k].Nodes.Contains(links[j].First))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found) { continue; }
+
+                            if (links[j].First == endNode ||
+                                links[j].Second == endNode)
+                            { reached = true; }
+
+                            Path path = new Path(paths[i]);
+                            path.Nodes.Add(path.Nodes.Contains(links[j].Second) ? links[j].First : links[j].Second);
+                            path.Links.Add(links[j]);
+                            newPaths.Add(path);
                         }
-
-                        Path path = new Path(paths[i]);
-                        path.Nodes.Add(path.Nodes.Contains(links[j].Second) ? links[j].First : links[j].Second);
-                        path.Links.Add(links[j]);
-                        newPaths.Add(path);
                     }
-                }
 
-                if (newPaths.Count > 0)
-                {
-                    paths = new List<Path>(newPaths);                        
-                }
+                    if (newPaths.Count > 0) { paths = new List<Path>(newPaths); }
 
-                if (reached) { break; }
-            } while (newPaths.Count != 0);
+                    if (reached) { break; }
+                } while (newPaths.Count != 0);
+            }
 
             List<Path> correctPathList = new List<Path>();
             for (int i = 0; i < paths.Count; i++)

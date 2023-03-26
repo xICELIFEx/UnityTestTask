@@ -12,6 +12,8 @@ namespace Assets.Scripts.PartThree
         public event Action<string, int, int> OnCurrentHpChanged;
         public event Action<string, int, int> OnCurrentSheeldChanged;
         public event Action<string, int, int> OnSheeldRestoreChanged;
+        public event Action OnWeaponsChanged;
+        public event Action OnModulesChanged;
         public event Action<HpChangeData> OnShipFired;
         
         private CharacteristicContainer _characteristicContainer = new CharacteristicContainer();
@@ -83,7 +85,8 @@ namespace Assets.Scripts.PartThree
 
             TimerData timerData = new TimerData();
             timerData.Id = "SheeldRestore";
-            timerData.Delay = 1f/(float)characteristicShipWrapper.SheeldRestore/100f;
+
+            timerData.Delay = characteristicShipWrapper.SheeldRestoreTimer;
             timers.Add(timerData);
             
             Update();
@@ -127,7 +130,8 @@ namespace Assets.Scripts.PartThree
                     }
                     else
                     {
-                        int hpDamage = hpChangeData.HpChangeValue - CurrentSheeld;  
+                        int hpDamage = hpChangeData.HpChangeValue - CurrentSheeld;
+                        CurrentHp = 0;
                         CurrentHp -= hpDamage;
                     }
                 }
@@ -154,6 +158,8 @@ namespace Assets.Scripts.PartThree
             {
                 _modules[i].OnUpdate(_characteristicContainer);
             }
+            
+            OnModulesChanged?.Invoke();
         }
         
         public void RemoveModule(string id)
@@ -180,6 +186,8 @@ namespace Assets.Scripts.PartThree
             {
                 _modules[i].OnUpdate(_characteristicContainer);
             }
+            
+            OnModulesChanged?.Invoke();
         }
         
         public void AddWeapon(IShipWeapon shipWeapon)
@@ -202,8 +210,10 @@ namespace Assets.Scripts.PartThree
 
             TimerData timerData = new TimerData();
             timerData.Id = shipWeapon.Id.ToString();
-            timerData.Delay = shipWeapon.Characteristic.Reload;
+            timerData.Delay = shipWeapon.Characteristic.ReloadTimer;
             timers.Add(timerData);
+            
+            OnWeaponsChanged?.Invoke();
         }
 
         public void RemoveWeapon(string id)
@@ -245,6 +255,8 @@ namespace Assets.Scripts.PartThree
             {
                 timers.Remove(timerData);
             }
+            
+            OnWeaponsChanged?.Invoke();
         }
 
         private async void Update()
@@ -289,7 +301,7 @@ namespace Assets.Scripts.PartThree
             {
                 if (timers[i].Id.Equals("SheeldRestore"))
                 {
-                    timers[i].Delay = 1f/(float)newValue/100f;
+                    timers[i].Delay = _characteristicContainer.GetFirst<CharacteristicShipWrapper>(CharacteristicType.Ship).SheeldRestoreTimer;
                     break;
                 }
             }
@@ -341,7 +353,7 @@ namespace Assets.Scripts.PartThree
                     {
                         if (timers[j].Id == _weapons[i].GetHashCode().ToString())
                         {
-                            timers[j].Delay = weaponCharacteristicWrapper.Reload;
+                            timers[j].Delay = weaponCharacteristicWrapper.ReloadTimer;
                             isUpdated = true;
                             break;
                         }

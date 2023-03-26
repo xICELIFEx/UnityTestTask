@@ -20,6 +20,7 @@ namespace Assets.Scripts.PartThree.Ships
         [SerializeField] private TMP_Text _shipHpAmount;
         [SerializeField] private TMP_Text _shipSheeldAmount;
         [SerializeField] private TMP_Text _shipSheeldRestore;
+        [SerializeField] private TMP_Text _shipDPS;
         
         private Ship _ship;
         private ModuleFactory _moduleFactory = new ModuleFactory();
@@ -49,6 +50,8 @@ namespace Assets.Scripts.PartThree.Ships
             
             _modulesList.OnModuleClickedEvent += OnModuleClickedEventHandler;
             _weaponsList.OnWeaponClickedEvent += OnWeaponClickedEventHandler;
+
+            OnShipDropdownValueChanged(_shipTypeDropdown.value);
         }
         
         private void OnDestroy()
@@ -92,12 +95,15 @@ namespace Assets.Scripts.PartThree.Ships
             _shipSheeldAmount.text = characteristicShip.SheeldAmount.ToString();
             //TODO: rework Sheeld Restore property
             _shipSheeldRestore.text = ((float)characteristicShip.SheeldRestore/100f).ToString();
+            _shipDPS.text = "0";
             _ship = new Ship(characteristicShip);
             _ship.IsPaused = true;
 
             _ship.OnCurrentHpChanged += OnCurrentHpChangedHandler;
             _ship.OnCurrentSheeldChanged += OnCurrentSheeldChangedHandler;
             _ship.OnSheeldRestoreChanged += OnSheeldRestoreChangedHandler;
+            _ship.OnWeaponsChanged += OnWeaponsChangedHandler;
+            _ship.OnModulesChanged += OnModulesChangedHandler;
 
             CharacteristicShipWrapper characteristicShipWrapper = _ship.CharacteristicContainer.GetFirst<CharacteristicShipWrapper>(CharacteristicType.Ship); 
             for (int i = 0; i < characteristicShipWrapper.ModuleCount; i++)
@@ -110,11 +116,13 @@ namespace Assets.Scripts.PartThree.Ships
                 _weaponsList.AddWeaponToList(null);
             }
         }
-        
+
         private void RemoveShip()
         {
             if (_ship == null) { return; }
             
+            _ship.OnModulesChanged -= OnModulesChangedHandler;
+            _ship.OnWeaponsChanged -= OnWeaponsChangedHandler;
             _ship.OnSheeldRestoreChanged -= OnSheeldRestoreChangedHandler;
             _ship.OnCurrentSheeldChanged -= OnCurrentSheeldChangedHandler;
             _ship.OnCurrentHpChanged -= OnCurrentHpChangedHandler;
@@ -138,9 +146,26 @@ namespace Assets.Scripts.PartThree.Ships
         
         private void OnSheeldRestoreChangedHandler(string shipId, int oldValue, int newValue)
         {
-            _shipSheeldRestore.text = ((float)newValue/100f).ToString();
+            _shipSheeldRestore.text = (_ship.CharacteristicContainer.GetFirst<CharacteristicShipWrapper>(CharacteristicType.Ship).SheeldRestore/100f).ToString();
         }
         
+        private void OnWeaponsChangedHandler()
+        {
+            float currentDPS = 0f;
+            for (int i = 0; i < _ship.Weapons.Count; i++)
+            {
+                currentDPS += (float) _ship.Weapons[i].Characteristic.Damage / _ship.Weapons[i].Characteristic.ReloadTimer;
+            }
+
+            _shipDPS.text = currentDPS.ToString();
+        }
+        
+        private void OnModulesChangedHandler()
+        {
+            //For recalculate dps if we add or remove module with change weapon reload time
+            OnWeaponsChangedHandler();
+        }
+
         private void OnModuleClickedEventHandler(ModuleConfig moduleConfig)
         {
             _selectedModuleConfig = moduleConfig;

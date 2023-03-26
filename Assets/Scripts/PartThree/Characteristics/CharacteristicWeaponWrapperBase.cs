@@ -29,7 +29,9 @@ namespace Assets.Scripts.PartThree.Characteristics
                 OnReloadChanged?.Invoke(this, _reload);
             }
         }
-
+        
+        public float ReloadTimer { get { return ((float) _reload / 1000f); } }
+        
         public CharacteristicWeaponWrapperBase(CharacteristicWeaponBase characteristicBase) : base(characteristicBase)
         {
             _damage = characteristicBase.Damage;
